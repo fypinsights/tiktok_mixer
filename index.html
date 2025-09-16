@@ -138,7 +138,7 @@
     const dl   = document.getElementById("dl");
 
     // If already unlocked previously, show download immediately
-    if (localStorage.getItem("dl_unlocked") === "1") dl.style.display = "block";
+    if (localStorage.getItem("dl_unlocked") === "1") { dl.style.display = "block"; form.style.display = "none"; setStatus("Unlocked.", "ok"); }
 
     function setStatus(msg, cls){
       stat.textContent = msg || "";
@@ -167,8 +167,9 @@
       } catch {}
 
       localStorage.setItem("dl_unlocked", "1");
-      dl.style.display = "block";
-      setStatus("Unlocked.", "ok");
+dl.style.display = "block";
+form.style.display = "none";
+setStatus("Unlocked.", "ok");
 
       if (USE_MAILTO){
         const subject = encodeURIComponent("Download request");
