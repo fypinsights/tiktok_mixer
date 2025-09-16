@@ -51,8 +51,6 @@
         <section class="card pad" aria-labelledby="gateTitle">
           <h2 id="gateTitle" style="margin-top:0">Unlock the Download</h2>
           <form id="f" novalidate>
-            <label for="name">Name</label>
-            <input id="name" name="name" type="text" placeholder="Jane Doe" autocomplete="name" required />
             <label for="email">Email</label>
             <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
             <button id="btn" type="submit">Submit & Continue</button>
@@ -109,10 +107,9 @@
 
   <script>
     // ===== CONFIG: edit these =====
-    // Replace the fake FILE_ID with your real Google Drive file ID
     const ZIP_PATH    = "https://drive.google.com/uc?export=download&id=12UAJQoByWbEqaU2SUmkbAtbwGZJn0aJw";
     const OWNER_EMAIL = "geliceerlicew@gmail.com";
-    const USE_MAILTO  = true; // set true if you want it to open the user's email app after unlock
+    const USE_MAILTO  = true;
 
     // Wire links and footer email
     const dlLink = document.getElementById("dllink");
@@ -129,17 +126,14 @@
     function setStatus(msg, cls){ stat.textContent = msg || ""; stat.className = "status" + (cls ? " " + cls : ""); }
     function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 
-    // Helper: show download only
     function showDownloadOnly(){
       dl.style.display = "block";
       form.style.display = "none";
       setStatus("Unlocked.", "ok");
     }
 
-    // Already unlocked? show download immediately
     if (localStorage.getItem("dl_unlocked") === "1") showDownloadOnly();
 
-    // Optional reset: add ?reset=1 to URL to clear unlock
     if (new URLSearchParams(location.search).get("reset") === "1") {
       localStorage.removeItem("dl_unlocked");
       localStorage.removeItem("dl_entries");
@@ -151,16 +145,13 @@
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       setStatus("");
-      const name  = form.name.value.trim();
       const email = form.email.value.trim();
-      if (!name){ setStatus("Name is required.", "err"); return; }
       if (!email){ setStatus("Email is required.", "err"); return; }
       if (!validEmail(email)){ setStatus("Enter a valid email.", "err"); return; }
 
-      // Minimal local record so repeat visits stay unlocked (still no server)
       try {
         const entries = JSON.parse(localStorage.getItem("dl_entries") || "[]");
-        entries.push({ name, email, ts: new Date().toISOString() });
+        entries.push({ email, ts: new Date().toISOString() });
         localStorage.setItem("dl_entries", JSON.stringify(entries));
       } catch {}
 
@@ -169,7 +160,7 @@
 
       if (USE_MAILTO){
         const subject = encodeURIComponent("Download request");
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPage: ${location.href}\nTime: ${new Date().toISOString()}`);
+        const body = encodeURIComponent(`Email: ${email}\nPage: ${location.href}\nTime: ${new Date().toISOString()}`);
         setTimeout(()=>{ window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`; }, 150);
       }
 
@@ -178,6 +169,3 @@
   </script>
 </body>
 </html>
-
-
-
