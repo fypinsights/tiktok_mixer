@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Access Download</title>
+  <style>
+    :root { --bg:#0f1115; --card:#171a20; --text:#e5e7eb; --muted:#9ca3af; --accent:#4f46e5; --accent2:#10b981; --err:#ef4444; }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    .wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .card{width:100%;max-width:460px;background:var(--card);border:1px solid #262a33;border-radius:14px;padding:26px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    h1{margin:0 0 8px;font-size:1.5rem}
+    p.sub{margin:0 0 18px;color:var(--muted);font-size:.95rem}
+    label{display:block;margin:12px 0 6px;font-weight:600}
+    input[type="text"],input[type="email"]{width:100%;padding:12px 14px;border-radius:8px;border:1px solid #2b303a;background:#0f1217;color:var(--text)}
+    button{width:100%;margin-top:16px;padding:12px 16px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+    button:hover{filter:brightness(.95)}
+    .status{margin-top:10px;font-size:.95rem}
+    .status.err{color:var(--err)}
+    .status.ok{color:var(--accent2)}
+    .dl{display:none;margin-top:16px;text-align:center}
+    .dl a{display:inline-block;padding:12px 18px;border-radius:10px;background:var(--accent2);color:#06110a;text-decoration:none;font-weight:800}
+    .foot{margin-top:14px;font-size:.85rem;color:var(--muted);text-align:center}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card" aria-labelledby="t">
+      <h1 id="t">Unlock the Download</h1>
+      <p class="sub">Enter your info to proceed. It’s quick, I’m not asking for your Social.</p>
+
+      <form id="f" novalidate>
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" placeholder="Jane Doe" autocomplete="name" required />
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+
+        <button id="btn" type="submit">Submit & Continue</button>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </form>
+
+      <div id="dl" class="dl">
+        <a id="dllink" href="#" download>Download Now</a>
+        <div class="foot">If the button doesn’t work, right-click and “Save link as…”</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ====== CONFIG ======
+    const ZIP_PATH   = "myfile.zip";         // your ZIP path or full URL
+    const OWNER_EMAIL= "you@example.com";    // for mailto mode
+    const USE_MAILTO = false;                // true = open email client, false = just store locally
+
+    // Wire the download link
+    const dlLink = document.getElementById("dllink");
+    dlLink.href = ZIP_PATH;
+
+    const form = document.getElementById("f");
+    const btn  = document.getElementById("btn");
+    const stat = document.getElementById("status");
+    const dl   = document.getElementById("dl");
+
+    // Show download immediately if already "unlocked" (return visitors)
+    if (localStorage.getItem("dl_unlocked") === "1") {
+      document.getElementById("dl").style.display = "block";
+    }
+
+    function setStatus(msg, cls) {
+      stat.textContent = msg || "";
+      stat.className = "status" + (cls ? " " + cls : "");
+    }
+
+    function validEmail(v){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      setStatus("");
+
+      const name  = form.name.value.trim();
+      const email = form.email.value.trim();
+
+      if (!name)  { setStatus("Name is required.", "err"); return; }
+      if (!email) { setStatus("Email is required.", "err"); return; }
+      if (!validEmail(email)) { setStatus("Enter a valid email.", "err"); return; }
+
+      btn.disabled = true;
+
+      // Store locally so you at least have something to reference client-side
+      try {
+        const entries = JSON.parse(localStorage.getItem("dl_entries") || "[]");
+        entries.push({ name, email, ts: new Date().toISOString() });
+        localStorage.setItem("dl_entries", JSON.stringify(entries));
+      } catch (_) {}
+
+      // Unlock
+      localStorage.setItem("dl_unlocked", "1");
+      dl.style.display = "block";
+      setStatus("Unlocked.", "ok");
+
+      // Optional: open email client for a quick “I want access” ping (no server needed)
+      if (USE_MAILTO) {
+        const subject = encodeURIComponent("Download request");
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPage: ${location.href}\nTime: ${new Date().toISOString()}`);
+        const url = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
+        // Open mail client without blocking the download
+        setTimeout(() => { window.location.href = url; }, 200);
+      }
+
+      // Start download after a short beat so the status is visible
+      setTimeout(() => { window.location.href = ZIP_PATH; btn.disabled = false; }, 400);
+    });
+  </script>
+</body>
+</html>
