@@ -3,79 +3,148 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Access Download</title>
+  <title>Download: FFmpeg Drop & Go</title>
+  <meta name="description" content="Enter your info to unlock the FFmpeg Drop & Go download. Includes clear operating instructions." />
   <style>
-    :root { --bg:#0f1115; --card:#171a20; --text:#e5e7eb; --muted:#9ca3af; --accent:#4f46e5; --accent2:#10b981; --err:#ef4444; }
+    :root{
+      --bg:#0f1115; --card:#171a20; --text:#e5e7eb; --muted:#9ca3af; --accent:#4f46e5; --accent-2:#10b981; --err:#ef4444; --line:#262a33;
+    }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-    .wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
-    .card{width:100%;max-width:460px;background:var(--card);border:1px solid #262a33;border-radius:14px;padding:26px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    h1{margin:0 0 8px;font-size:1.5rem}
-    p.sub{margin:0 0 18px;color:var(--muted);font-size:.95rem}
+    .wrap{min-height:100vh;display:grid;place-items:center;padding:28px}
+    .container{width:100%;max-width:920px;display:grid;gap:20px}
+    .grid{display:grid;gap:20px}
+    @media(min-width:900px){.grid{grid-template-columns:480px 1fr}}
+
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .pad{padding:26px}
+    h1{margin:0 0 8px;font-size:1.6rem}
+    .sub{margin:0;color:var(--muted)}
+
     label{display:block;margin:12px 0 6px;font-weight:600}
-    input[type="text"],input[type="email"]{width:100%;padding:12px 14px;border-radius:8px;border:1px solid #2b303a;background:#0f1217;color:var(--text)}
-    button{width:100%;margin-top:16px;padding:12px 16px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
-    button:hover{filter:brightness(.95)}
+    input[type="text"],input[type="email"]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #2b303a;background:#0f1217;color:var(--text)}
+    button{width:100%;margin-top:16px;padding:12px 16px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
+    button:hover{filter:brightness(.96)}
     .status{margin-top:10px;font-size:.95rem}
     .status.err{color:var(--err)}
-    .status.ok{color:var(--accent2)}
+    .status.ok{color:var(--accent-2)}
+
     .dl{display:none;margin-top:16px;text-align:center}
-    .dl a{display:inline-block;padding:12px 18px;border-radius:10px;background:var(--accent2);color:#06110a;text-decoration:none;font-weight:800}
-    .foot{margin-top:14px;font-size:.85rem;color:var(--muted);text-align:center}
+    .dl a{display:inline-block;padding:12px 18px;border-radius:12px;background:var(--accent-2);color:#06110a;text-decoration:none;font-weight:900}
+    .muted{color:var(--muted)}
+    .small{font-size:.9rem}
+
+    .section h2{margin:0 0 10px;font-size:1.2rem}
+    .steps{list-style:decimal;margin:0;padding-left:20px}
+    .steps li{margin:10px 0}
+    .kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:6px;background:#0f1217}
+    .note{border-left:3px solid var(--accent);padding-left:12px}
+    .hr{height:1px;background:var(--line);margin:16px 0}
+    details{background:#12151b;border:1px solid var(--line);border-radius:10px;padding:12px}
+    summary{cursor:pointer;font-weight:700}
+    .footer{margin-top:10px;text-align:center}
   </style>
 </head>
 <body>
   <main class="wrap">
-    <section class="card" aria-labelledby="t">
-      <h1 id="t">Unlock the Download</h1>
-      <p class="sub">Enter your info to proceed. It’s quick, I’m not asking for your Social.</p>
+    <div class="container">
+      <header class="card pad">
+        <h1>FFmpeg Drop & Go — Download Access</h1>
+        <p class="sub">Enter your info to unlock the download. No installs needed — ffmpeg is bundled.</p>
+      </header>
 
-      <form id="f" novalidate>
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" placeholder="Jane Doe" autocomplete="name" required />
+      <div class="grid">
+        <!-- ACCESS / FORM CARD -->
+        <section class="card pad" aria-labelledby="gateTitle">
+          <h2 id="gateTitle" style="margin-top:0">Unlock the Download</h2>
+          <form id="f" novalidate>
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Jane Doe" autocomplete="name" required />
 
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
 
-        <button id="btn" type="submit">Submit & Continue</button>
-        <div id="status" class="status" role="status" aria-live="polite"></div>
-      </form>
+            <button id="btn" type="submit">Submit & Continue</button>
+            <div id="status" class="status" role="status" aria-live="polite"></div>
 
-      <div id="dl" class="dl">
-        <a id="dllink" href="#" download>Download Now</a>
-        <div class="foot">If the button doesn’t work, right-click and “Save link as…”</div>
+            <div id="dl" class="dl">
+              <a id="dllink" href="#" download>Download Now</a>
+              <p class="muted small" style="margin-top:10px">If this fails, right‑click the button and choose “Save link as…”</p>
+            </div>
+
+            <div class="hr"></div>
+            <p class="small muted">Direct link backup: <a id="directLink" href="#">open</a></p>
+          </form>
+        </section>
+
+        <!-- INSTRUCTIONS CARD -->
+        <section class="card pad section" aria-labelledby="instTitle">
+          <h2 id="instTitle">Operating Instructions</h2>
+          <ol class="steps">
+            <li><strong>Download & Extract</strong><br />
+              Click the button to download the ZIP. Right‑click the ZIP → <span class="kbd">Extract All…</span> into a normal folder (Desktop is fine). Do <em>not</em> run scripts from inside the ZIP.
+            </li>
+            <li><strong>Add Your Videos</strong><br />
+              Place source videos into the <span class="kbd">incoming_videos</span> folder. Leave other folders (<span class="kbd">bin</span>, <span class="kbd">results</span>, <span class="kbd">logs</span>, <span class="kbd">tmp</span>) alone.
+            </li>
+            <li><strong>Run the Launcher</strong><br />
+              Double‑click <span class="kbd">run_windows.bat</span>. This opens PowerShell and runs the script. No installs required — the bundled <span class="kbd">bin/ffmpeg.exe</span> is used automatically.
+            </li>
+            <li><strong>Collect Results</strong><br />
+              Finished files appear in <span class="kbd">results</span>. Logs go to <span class="kbd">logs</span>. You can ignore <span class="kbd">tmp</span> unless troubleshooting.
+            </li>
+          </ol>
+
+          <div class="hr"></div>
+          <div class="note small">
+            <p><strong>Notes</strong></p>
+            <ul>
+              <li>If Windows SmartScreen warns you, click <em>More info</em> → <em>Run anyway</em>.</li>
+              <li>Extract to a writable path (e.g., Desktop). Avoid <span class="kbd">C:\Program Files\</span>.</li>
+              <li>You do <em>not</em> need to install ffmpeg or edit PATH. It’s self‑contained.</li>
+              <li>Don’t close the window mid‑process — that stops the job.</li>
+            </ul>
+          </div>
+
+          <details style="margin-top:12px">
+            <summary>Technical verification (optional)</summary>
+            <p class="small muted">The launcher runs PowerShell with <span class="kbd">-ExecutionPolicy Bypass</span> and calls the script next to it. The script resolves paths via <span class="kbd">$PSScriptRoot</span> and invokes <span class="kbd">bin/ffmpeg.exe</span> directly. No global PATH dependency.</p>
+          </details>
+        </section>
       </div>
-    </section>
+
+      <footer class="card pad footer">
+        <p class="small muted">Having trouble? Email <a id="ownerEmail" href="#"></a></p>
+      </footer>
+    </div>
   </main>
 
   <script>
-    // ====== CONFIG ======
-    const ZIP_PATH   = "myfile.zip";         // your ZIP path or full URL
-    const OWNER_EMAIL= "you@example.com";    // for mailto mode
-    const USE_MAILTO = false;                // true = open email client, false = just store locally
+    // ===== CONFIG: edit these =====
+    const ZIP_PATH    = "myfile.zip";          // e.g. the ZIP filename in the same folder as index.html
+    const OWNER_EMAIL = "you@example.com";     // support contact shown in footer
+    const USE_MAILTO  = false;                  // true = open mail client after unlock, false = don't
 
-    // Wire the download link
+    // Wire links and contact
     const dlLink = document.getElementById("dllink");
-    dlLink.href = ZIP_PATH;
+    const directLink = document.getElementById("directLink");
+    const ownerEmailA = document.getElementById("ownerEmail");
+    dlLink.href = ZIP_PATH; directLink.href = ZIP_PATH;
+    ownerEmailA.textContent = OWNER_EMAIL; ownerEmailA.href = `mailto:${OWNER_EMAIL}`;
 
     const form = document.getElementById("f");
     const btn  = document.getElementById("btn");
     const stat = document.getElementById("status");
     const dl   = document.getElementById("dl");
 
-    // Show download immediately if already "unlocked" (return visitors)
-    if (localStorage.getItem("dl_unlocked") === "1") {
-      document.getElementById("dl").style.display = "block";
-    }
+    // If already unlocked previously, show download immediately
+    if (localStorage.getItem("dl_unlocked") === "1") dl.style.display = "block";
 
-    function setStatus(msg, cls) {
+    function setStatus(msg, cls){
       stat.textContent = msg || "";
       stat.className = "status" + (cls ? " " + cls : "");
     }
-
-    function validEmail(v){
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-    }
+    function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -84,35 +153,30 @@
       const name  = form.name.value.trim();
       const email = form.email.value.trim();
 
-      if (!name)  { setStatus("Name is required.", "err"); return; }
-      if (!email) { setStatus("Email is required.", "err"); return; }
-      if (!validEmail(email)) { setStatus("Enter a valid email.", "err"); return; }
+      if (!name){ setStatus("Name is required.", "err"); return; }
+      if (!email){ setStatus("Email is required.", "err"); return; }
+      if (!validEmail(email)){ setStatus("Enter a valid email.", "err"); return; }
 
       btn.disabled = true;
 
-      // Store locally so you at least have something to reference client-side
+      // Minimal local record so repeat visits stay unlocked (still no server)
       try {
         const entries = JSON.parse(localStorage.getItem("dl_entries") || "[]");
         entries.push({ name, email, ts: new Date().toISOString() });
         localStorage.setItem("dl_entries", JSON.stringify(entries));
-      } catch (_) {}
+      } catch {}
 
-      // Unlock
       localStorage.setItem("dl_unlocked", "1");
       dl.style.display = "block";
       setStatus("Unlocked.", "ok");
 
-      // Optional: open email client for a quick “I want access” ping (no server needed)
-      if (USE_MAILTO) {
+      if (USE_MAILTO){
         const subject = encodeURIComponent("Download request");
         const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPage: ${location.href}\nTime: ${new Date().toISOString()}`);
-        const url = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
-        // Open mail client without blocking the download
-        setTimeout(() => { window.location.href = url; }, 200);
+        setTimeout(()=>{ window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`; }, 150);
       }
 
-      // Start download after a short beat so the status is visible
-      setTimeout(() => { window.location.href = ZIP_PATH; btn.disabled = false; }, 400);
+      setTimeout(()=>{ window.location.href = ZIP_PATH; btn.disabled = false; }, 350);
     });
   </script>
 </body>
