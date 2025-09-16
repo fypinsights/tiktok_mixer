@@ -164,8 +164,9 @@
         setTimeout(()=>{ window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`; }, 150);
       }
 
-      setTimeout(()=>{ window.location.href = ZIP_PATH; }, 350);
+       setTimeout(()=>{ window.open(ZIP_PATH, "_blank"); }, 350);
     });
   </script>
 </body>
 </html>
+
